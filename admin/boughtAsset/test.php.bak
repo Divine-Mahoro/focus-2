@@ -1,0 +1,212 @@
+<?php 
+$error_msg = '';
+$success_msg = '';
+$warning_msg = '';
+if(isset($_GET['immovable_asset_id'])){
+    $immovable_asset_id = $_GET['immovable_asset_id'];
+} else if(isset($_POST['imovable_asset_id'])){
+    $immovable_asset_id = $_POST['immovable_asset_id'];
+}
+if(isset($_POST['btnSubmit'])){
+	print_r($_POST);
+	$asset_owner_id = prepare_input($_POST['asset_owner']);
+	$asset_location_id = prepare_input($_POST['locationValue']);
+    $country = prepare_input($_POST['countryValue']);
+    $city = prepare_input($_POST['cityValue']);
+    $estimated_value = prepare_input($_POST['estimated_value']);	
+	$asset_source = prepare_input($_POST['asset_source']);
+    $joint_asset = prepare_input($_POST['jointopt']);
+    $village_code = prepare_input($_POST['village']);
+	$percentage_of_shares = prepare_input($_POST['percentage_of_shares']);
+    $is_bought = prepare_input($_POST['boughtopt']);
+	$seller_name = prepare_input($_POST['seller_name']);
+	$buying_price = prepare_input($_POST['buying_price']);
+    $by_loan = prepare_input($_POST['loanopt']);
+	$bank_name = prepare_input($_POST['bank_name']);
+	$installment = prepare_input($_POST['installment']);
+	$loan_amount = prepare_input($_POST['loan_amount']);
+	$expected_loan_clear_date = prepare_input($_POST['expected_loan_clear_date']);
+    $is_rent = prepare_input($_POST['is_rent']);
+	$monthly_pay = prepare_input($_POST['monthly_pay']);
+	
+	//echo("After Checking values");
+	$tableName = "immovable_asset_declarations";
+	$fieldsNames = array(
+                   "asset_type_id",
+				   "employee_id",
+				   "declaration_period_id",
+                   "immovable_asset_id",
+				   "asset_location_id",
+				   "asset_owner_id",
+                   "country",
+                   "city",
+                   "village_code",
+                   "estimated_value",
+                   "asset_source",
+                   "joint_asset",
+				   "percentage_of_shares",
+                   "is_bought",
+				   "seller_name",
+				   "buying_price",
+                   "by_loan",
+				   "bank_name",
+				   "installment",
+				   "loan_amount",
+				   "expected_loan_clear_date",
+                   "is_rent",
+				   "monthly_pay",
+				   "declaration_date"
+                );
+	$fieldsValues = array(
+                          1,
+				          $employee_id,
+                          getDeclarationPeriodId(),
+                          $immovable_asset_id,
+						  $asset_location_id,
+						  $asset_owner_id,
+                          $country,
+                          $city,
+                          $village_code,
+                          $estimated_value,
+                          $asset_source,
+						  $joint_asset,
+						  $percentage_of_shares,
+                          $is_bought,
+						  $seller_name,
+						  $buying_price,
+                          $by_loan,
+						  $bank_name,
+						  $installment,
+						  $loan_amount,
+						  $expected_loan_clear_date,
+                          $is_rent,
+						  $monthly_pay,
+						  date("Y-m-d H:i:s")
+						  );	
+	if(getDeclarationPeriodId() != NULL){
+		if(insertRecord($tableName,$fieldsNames,$fieldsValues)>0){
+			$success_msg = 'Record inserted successfully';
+		} else {
+			$error_msg = 'Error occurs while inserting record';
+		}
+	} else {
+		$error_msg = 'It is not period of declaration now!';
+	}
+	
+	
+}
+?>
+        <!--**********************************
+            Content body start
+        ***********************************-->
+       
+                
+                <!-- row -->
+                <div class="row">
+                    <div class="col-xl-6 col-xxl-12"> 
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="basic-form">
+                                    <div id="links_content" style="min-height:390px;overflow-y: auto;">
+							<table width="80%" align="center" border="1" id="anx">
+								<tr bgcolor="#D3D3D3"></tr>
+								<tr>
+									<th colspan="3" bgcolor="#b9dbe9" class="Tabl1Hdr1">System Admin
+										</th>
+								</tr>
+								<!-- START -- TAX TYPE CREATION - AUTOMATION  Start Date 10/12/2014 -->
+
+								<tr>
+									<td align="center"><a href="taxTypeCreation">TaxType Creation</a>
+									</td>
+									<td align="center"><a href="taxTypeFormCreation">Form Line Creation</a>
+									</td>
+									<td align="center"><a href="formLineCalcMapping">Form Line Formula</s:a>
+									</td>
+								</tr>
+								<!-- END -- TAX TYPE CREATION - AUTOMATION   -->
+								<tr>
+									<td align="center"><s:a href="taxPeriodGeneration">Tax Period Generation</s:a></td>
+									<td align="center"><s:a href="enableEpaymentJsp">Enable E-payment</s:a></td>
+									<td align="center"><s:a href="penaltyInterestCalc">Penalty/Interest Calculation</s:a></td>
+								</tr>
+								<tr>
+									<td align="center"><a href="otpEnablePage">OTP Status Enable</s:a></td>
+									<td align="center"><a href="otpDisablePage">OTP Status Disable</s:a>
+									</td>
+										<td align="center"><a href="dashBoard">Dash Board</s:a></td>
+								</tr>
+								<tr>
+									<td align="center"><a href="roleEmpPage">Role Employee Mapping</s:a></td>
+									<td align="center"><a href="roleModulePage">Role Module Mapping</s:a></td>
+									<td align="center"><a href="getNextRoleId">Role Master Form</s:a></td>
+								</tr>
+								<tr>
+									
+									 <td align="center"><a href="uploadPaymentDetails">Upload Payment Details</s:a></td> 
+									<td align="center"><a href="formMasterEntry">Form Master Entry</s:a></td>
+									<td align="center"><a href="menuMasterEntry">Menu Master Entry</s:a></td>
+								</tr>
+								<tr>
+									<td align="center"><a href="changeDueDate">Change Due Date(RSSB)</s:a></td>
+									<td align="center"><a href="deregistrationEntry">De-Registration</s:a></td>
+									<td align="center"><a href="setVoluntaryRemuneration">Remuneration Limit</s:a></td>
+								</tr>
+								
+								<tr>
+									<td align="center"><a href="taxCollectMaster">Tax Collect Master</s:a></td>
+									<td align="center"><a href="adminResetPasswordJsp">Admin Reset Password</s:a></td>
+									<td align="center"><a href="multiDocsPayment">Payment For Multi Docs</s:a></td>
+									
+								</tr>
+								
+								<tr>
+								<td align="center"><a href="resetDocumentPage">e-tax Submitted Assessment Deletion</s:a></td> 
+								<td align="center"><a href="rssbPaymentDeletion">Only Rssb Payment Deletion</s:a></td>
+								<td align="center"><a href="rssbPartialDeletion">Rssb Contribution Deletion</s:a></td>
+									
+									
+								
+								 
+								
+
+							</table>
+						</div>
+                                </div>
+                            </div>
+                        </div>
+						
+						
+						
+                        
+                        
+                        
+                        
+                        
+						
+                    </div>
+					
+					
+                    
+                </div>
+            
+        <script type="text/javascript">
+		
+		function getDetails(){
+			
+			let locationValue = document.forms["rsForm"]["locationValue"].value;
+			
+			alert("Country value: "+locationValue);
+			if (document.forms[0]['asset_owner'].value == 0) {
+				alert("Please Select Owner Asset");
+				return false;
+			}
+		}
+		
+		
+		//if ( window.history.replaceState ) {
+			//window.history.replaceState( null, null, window.location.href );
+		//}
+		
+		</script>
+

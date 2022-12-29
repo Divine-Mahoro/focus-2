@@ -1,0 +1,62 @@
+<?php
+require_once("connection.php");
+require_once("backend/functions.php");
+if(isset($_POST['sbmtEmail'])){
+	$employee = prepare_input($_POST['employee']);
+	if($employee == "allEmployee"){
+		$sqls = "SELECT * FROM employees WHERE employee_id IN ('209773','209747','209765','216072','216073')";  
+
+		$stmts = $dbh->prepare($sqls);
+		$stmts->execute();
+  	if($stmts->rowCount()){
+      $wellsent =0;
+      $notsent =0;
+      while($row = $stmts->fetch(PDO::FETCH_ASSOC)){
+        $employee_id = $row['employee_id'];
+        $email = $row['email'];
+        
+        $url = "http://192.168.125.141/tor/page-register.php?employee_id=".$employee_id;
+
+          $to = $email;
+
+          $subject = 'Link to submit employee information in Asset Declaration Portal';
+
+          $message = '<p>Following the NOM PSC meeting of 31<sup>st</sup> August 2021 which encouraged Senior Management team who did not manage to submit their career information in Asset Declaration portal for the purpose of staff record keeping.</p>';
+
+         $message .= '<p>Kindly use the link below to submit your career information.</p>';
+
+
+          
+          $message .= '<a href = "'.$url.'">'.$url.'</a></p>';
+
+          $message .= '<br><p>Kind Regards </p>';
+
+          $headers = "From: RRA <Jean.Bizimana@rra.gov.rw>\r\n";
+          $headers .= "content-type: text/html\r\n";
+          if(mail($to,$subject,$message,$headers)){
+            $sql = "UPDATE employees SET date_time_sent=now(), email_sent='sent' WHERE employee_id = '$employee_id'";
+            $wellsent += 1;
+          }
+          else{
+            $sql = "UPDATE employees SET date_time_sent=now(), email_sent='not sent' WHERE employee_id = '$employee_id'";
+            $notsent += 1;
+          }
+          $stmt = $dbh->prepare($sql);
+          $que1=$stmt->execute();
+      }
+      echo"sent=". $wellsent;
+      echo"not sent=". $notsent;
+	
+	
+	}
+	}else{
+		
+	}
+}
+ 
+
+
+	$dbh=null;
+
+?>
+

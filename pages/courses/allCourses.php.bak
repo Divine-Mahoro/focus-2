@@ -1,0 +1,97 @@
+<?php 
+            $error_msg = '';
+            $success_msg = '';
+            $warning_msg = '';
+?>
+				<?php 
+				if(isset($_GET["action"]) and $_GET["action"]="add"){
+					include("pages/businessAsset/forms/businessForms.php");
+				} else if(isset($_GET["action"]) and $_GET["action"]="edit"){
+					$id = $_GET["edit"];
+					$edit_qry = "SELECT * FROM business_declaration
+								 WHERE business_declaration_id='".$id."'";
+					$stmt = $dbh->prepare($edit_qry);
+					$stmt->execute();
+					if($row=$stmt->fetch(PDO::FETCH_ASSOC)){
+						extract($row);						
+					}
+					echo 'ID= '.$id;
+					include("forms/businessEditForms.php");
+				} else {
+					$query = "SELECT * FROM business_declaration
+							  WHERE employee_id = '".$_SESSION['employee']."'";
+					$stmt = $dbh->prepare($query);
+					$stmt->execute();
+				}
+				?>
+				
+
+				<div class="row">
+                    <div class="col-xl-6 col-xxl-12"> 
+				
+								<?php 
+									if(isset($_GET['success_msg']) && $_GET['success_msg'] != ''){
+										echo '<p class="text-success">'.$_GET['success_msg'].'</p>';
+									} else if(isset($_GET['warning_msg']) && $_GET['warning_msg'] != ''){
+										echo '<p class="text-warning">'.$_GET['warning_msg'].'</p>';
+									} else if(isset($_GET['error_msg']) && $_GET['error_msg'] != ''){
+										echo '<p class="text-danger">'.$_GET['error_msg'].'</p>';
+									} else if(isset($success_msg) && $success_msg != ''){
+										echo '<p class="text-success">'.$success_msg.'</p>';
+									} else if(isset($warning_msg) && $warning_msg != ''){
+										echo '<p class="text-success">'.$warning_msg.'</p>';
+									}  else if(isset($error_msg) && $error_msg != ''){
+										echo '<p class="text-success">'.$error_msg.'</p>';
+									}
+								?>
+								<div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Table Hover</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-responsive-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Name</th>
+                                                <th>Status</th>
+                                                <th>Date</th>
+                                                <th>Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th>1</th>
+                                                <td>Kolor Tea Shirt For Man</td>
+                                                <td><span class="badge badge-primary">Sale</span>
+                                                </td>
+                                                <td>January 22</td>
+                                                <td class="color-primary">$21.56</td>
+                                            </tr>
+                                            <tr>
+                                                <th>2</th>
+                                                <td>Kolor Tea Shirt For Women</td>
+                                                <td><span class="badge badge-success">Tax</span>
+                                                </td>
+                                                <td>January 30</td>
+                                                <td class="color-success">$55.32</td>
+                                            </tr>
+                                            <tr>
+                                                <th>3</th>
+                                                <td>Blue Backpack For Baby</td>
+                                                <td><span class="badge badge-danger">Extended</span>
+                                                </td>
+                                                <td>January 25</td>
+                                                <td class="color-danger">$14.85</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+					</div>
+				</div>
+        <!--**********************************
+            Content body end
+        ***********************************-->

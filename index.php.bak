@@ -1,0 +1,174 @@
+<?php
+require_once("connection.php");
+require_once("functions.php");
+$insert_msg = '';
+$error_msg = '';
+$warning_msg = '';
+$curr_period_id = getDeclarationPeriodId();
+
+if(isset($_POST['sign_in'])){
+	$user_name= prepare_input($_POST['user_name']);
+    $password = prepare_input($_POST['password']);
+    $password = sha1($password);
+      
+	$user_role=getFieldValueById("role","employees",$user_name);
+	  
+	if($curr_period_id == NULL && $user_role != "admin"){
+		$warning_msg = '
+						<div class="text-warning" style="margin-left: 15px;">Sorry. It is not period of declaration.</div>
+					';
+	} else if(has_submitted($curr_period_id,$user_name) && $user_role != "admin"){
+		echo "<script>location.assign('alreadySubmitSuccess.php')</script>";
+	} else {
+  
+		$sql = "SELECT * FROM employees where employee_id='$user_name' AND password='$password'";
+		$stmt = $dbh->prepare($sql);
+		$stmt->execute();
+		if($stmt->rowCount()){
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);
+			$account_status = $row['account_status'];
+			$employee_id = $row['employee_id'];
+			$role = $row['role'];
+			$submitted_status = $row['submitted_status'];		
+			
+			if($account_status != "Enabled"){
+				 $error_msg = '
+								<div class="text-danger" style="margin-left: 15px;">Your account is disabled. Contact System Administrator.</div>
+							';
+			} else if($role == "user" && $submitted_status == 0){
+				session_start();
+				$_SESSION['employee'] = $employee_id;
+				//$_SESSION['user'] = $employee_id;
+				$_SESSION['main_link'] = "staffUser.php";
+				echo "<script>location.assign('staffUser.php')</script>";
+				
+			} else if($role == "admin"){
+				session_start();
+				$_SESSION['employee'] = $employee_id;
+				$_SESSION['admin'] = $employee_id;
+				$_SESSION['main_link'] = "staff.php";
+				echo "<script>location.assign('staff.php')</script>";
+
+			} 
+		} else {
+				 $error_msg = '
+						<div class="text-danger" style="margin-left: 15px;">Error! Login Fails.</div>
+					';
+		} 
+	}
+}
+/*
+if(isset($_GET['reset_pwd']) && $_GET['reset_pwd'] == "success"){
+    $insert_msg = '
+                <div class="text-success" style="margin-left: 15px;">Your was Updated Successfully</div>
+            ';
+  }
+*/
+?>
+
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>AUCA MIS - MIS </title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/logo1.png">
+    <link href="./css/style.css" rel="stylesheet">
+
+</head>
+
+<body class="h-100">
+    <div class="authincation h-100">
+        <div class="container-fluid h-100">
+            <div class="row justify-content-center h-100 align-items-center">
+                <div class="col-md-4">
+                    <div class="authincation-content">
+                        <div class="row no-gutters">
+                            <div class="col-xl-12">
+                                <div class="auth-form">
+								<img src="./images/auca_logo.png" style="width: 300px; height: 80px; align:center;" alt=""/> 
+                                    <h4 class="text-left text-dark mb-4">Please, enter your Account ID and Password to login</h4>
+                                    <div>                                        
+                                            <?php 
+                                                if(isset($success_msg) && (!empty(trim($success_msg)))){
+                                                    echo '<p class="text-success">'.$success_msg.'</p>';
+                                                } else if(isset($error_msg) && (!empty(trim($error_msg)))){
+                                                    echo '<p class="text-danger">'.$error_msg.'</p>';
+                                                } else if(isset($warning_msg) && (!empty(trim($warning_msg)))){
+                                                    echo '<p class="text-warning">'.$warning_msg.'</p>';
+                                                } else if(isset($_GET['success_msg']) && (!empty(trim($_GET['success_msg'])))){
+                                                    echo '<p class="text-success">'.$_GET['success_msg'].'</p>';
+                                                } else if(isset($_GET['error_msg']) && (!empty(trim($_GET['error_msg'])))){
+                                                    echo '<p class="text-danger">'.$_GET['error_msg'].'</p>';
+                                                } else if(isset($_GET['warning_msg']) && (!empty(trim($_GET['warning_msg'])))){
+                                                    echo '<p class="text-warning">'.$_GET['warning_msg'].'</p>';
+                                                }
+                                            ?>                                    
+                                    </div>
+                                    <form action="index.php" method="POST" name="rsForm" id="rsForm"
+									    onSubmit="return getDetails();">
+                                        <div class="form-group">
+                                            <label><strong>Employee ID <span class="text-danger">*</span></strong></label>
+                                            <input type="text" name="user_name" id="user_name" class="form-control" placeholder="Enter your ID" required />
+											</div>
+                                        <div class="form-group">
+                                            <label><strong>Password <span class="text-danger">*</span></strong></label>
+                                            <input type="password" name="password" class="form-control" autocomplete="off" required />
+                                        </div>
+                                        <div class="form-row d-flex justify-content-between mt-4 mb-2">
+                                            <!--<div class="form-group">
+                                                <div class="form-check ml-2">
+                                                    <input class="form-check-input" type="checkbox" id="basic_checkbox_1">
+                                                    <label class="form-check-label" for="basic_checkbox_1">Remember me</label>
+                                                </div>
+                                            </div>-->
+                                            <!--<div class="form-group">
+                                                <a href="page-forgot-password.html">Forgot Password?</a>
+                                            </div>-->
+                                        </div>
+                                        <div class="text-center">
+                                            <button type="submit" name="sign_in" class="btn btn-primary btn-block">Login</button>
+                                        </div>
+                                    </form>
+                                    <!--<div class="new-account mt-3">
+                                        <p>Don't have an account? <a class="text-primary" href="./page-register.html">Sign up</a></p>
+                                    </div>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <!-- Required vendors -->
+    <script src="./vendor/global/global.min.js"></script>
+    <script src="./js/quixnav-init.js"></script>
+    <script src="./js/custom.min.js"></script>
+	
+	<script type="text/javascript">
+		
+                    function getDetails(){
+                        
+						let user_name = document.forms["rsForm"]["user_name"].value;
+						var numericExpression = /^[0-9]+$/;
+						if (!user_name.match(numericExpression)) {
+							alert("User name should be digital number eg:12341");
+							return false;
+						}
+                    }
+                    if ( window.history.replaceState ) {
+                        window.history.replaceState( null, null, window.location.href );
+                    }
+    </script>
+</body>
+
+</html>

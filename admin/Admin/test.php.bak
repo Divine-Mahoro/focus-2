@@ -1,0 +1,195 @@
+<?php 
+				if(isset($_GET["action"]) and $_GET["action"]="unSbmt"){
+					include("pages/Admin/reports/test22.php");
+				} else if(isset($_GET["action"]) and $_GET["action"]="edit"){
+					$id = $_GET["edit"];
+					$edit_qry = "SELECT * FROM immovable_asset_declarations
+								 WHERE immovable_asset_declaration_id='".$id."'";
+					$stmt = $dbh->prepare($edit_qry);
+					$stmt->execute();
+					if($row=$stmt->fetch(PDO::FETCH_ASSOC)){
+						extract($row);						
+					}
+					echo 'ID= '.$id;
+					include("forms/quarryEditForm.php");
+				} else {
+					$query = "SELECT * FROM immovable_asset_declarations
+							  WHERE employee_id = '".$_SESSION['employee']."' AND 
+							  immovable_asset_id=8";
+					$stmt = $dbh->prepare($query);
+					$stmt->execute();
+				?>
+				
+				<?php 
+				  $sql = "SELECT COUNT(*) AS EMPLOYEE FROM employees ";
+				  $stmt = $dbh->prepare($sql);
+				  $stmt->execute();
+				  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+				  $name = $row['EMPLOYEE'];
+				  
+				  $sql2 = "SELECT COUNT(*) EMPLOYEE_ALL FROM employees WHERE account_status = 'Enabled'";
+				  $stmt2 = $dbh->prepare($sql2);
+				  $stmt2->execute();
+				  $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+				  $name2 = $row2['EMPLOYEE_ALL'];
+				  
+				  $submitted = "SELECT COUNT(*) AS SUBMIT FROM employees WHERE submitted_status = 1";
+				  $stmtSubmitted = $dbh->prepare($submitted);
+				  $stmtSubmitted->execute();
+				  $rowSubmitted = $stmtSubmitted->fetch(PDO::FETCH_ASSOC);
+				  $submittedRes = $rowSubmitted['SUBMIT'];
+				  
+				?>
+				
+				<div class="row">
+                    <div class="col-xl-6 col-xxl-12"> 
+				
+							<div class="card-body">
+								<?php 
+									if(isset($_GET['success_msg']) && $_GET['success_msg'] != ''){
+										echo '<p class="text-success">'.$_GET['success_msg'].'</p>';
+									} else if(isset($_GET['warning_msg']) && $_GET['warning_msg'] != ''){
+										echo '<p class="text-warning">'.$_GET['warning_msg'].'</p>';
+									} else if(isset($_GET['error_msg']) && $_GET['error_msg'] != ''){
+										echo '<p class="text-danger">'.$_GET['error_msg'].'</p>';
+									} else if(isset($success_msg) && $success_msg != ''){
+										echo '<p class="text-success">'.$success_msg.'</p>';
+									} else if(isset($warning_msg) && $warning_msg != ''){
+										echo '<p class="text-success">'.$warning_msg.'</p>';
+									}  else if(isset($error_msg) && $error_msg != ''){
+										echo '<p class="text-success">'.$error_msg.'</p>';
+									}
+								?>
+
+								<?php if($stmt->rowCount() > 0){ ?>
+								<div class="col-12">
+									<div class="card">
+									<div class="card-body">
+									
+										<div class="table-responsive my-3 align-items-center">
+								<div><span class="pull-right btn btn-primary"><a href="<?php echo $main_link; ?>?dir=Admin&page=test&action=unSbmt"> Add</a></span></div>
+                                    <table width="60%" align="center" border="1">
+								<tr bgcolor="#D3D3D3"></tr>
+								<tr>
+									<th colspan="2" style="align:center;" bgcolor="#0b6a90" class="Tabl1Hdr1"><center>System Admin</center>
+										</th>
+								</tr>
+								<tr>
+									<td style="color:black" align="center">Submited Employee <span class="badge badge-pill badge-primary"><?php echo $submittedRes . ' OF ' . $name; ?></span></td>
+									<td style="color:black" align="center">Declared Process Employee<span class="badge badge-pill badge-primary"> <?php echo $name2 . ' OF ' . $name; ?></span></td>
+								</tr>
+									<td style="color:black" align="center">Undeclered employee</td>
+									<td style="color:black" align="center"><a href="staff.php?dir=Admin&page=adminLink&action=unSbmt">Unsubmitted Employee</a></td>
+								</tr>
+								
+
+							</table>
+										</div>
+									</div>
+									</div>
+								</div>
+								<?php
+									} else {
+										echo '<div><span class="pull-right btn btn-primary"><a href="'.$main_link.'?dir=immovable&page=fishPond&action=add"> Add</a></span></div>';
+										echo 'No records found.';
+									}
+								}
+								?>
+							<div class="modal fade" id="viewResidential">
+									   <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Fish Pond Data view</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+													
+													<div class="form-row my-2">
+														
+														<div class="col">Asset Owner:</div>
+														<div class="col asset_owner_id"></div>
+														
+													</div>
+                                                    
+													<div class="form-row my-2">
+														<div class="col">Asset Location:</div>
+														<div class="col asset_location_id"></div>
+														
+													</div>
+													
+													<div class="form-row my-2">
+														<div class="col">Estimated Amount:</div>
+														<div class="col estimated_value"></div>
+													</div>
+													
+													<div class="form-row my-2">
+														<div class="col">Asset source:</div>
+														<div class="col asset_source"></div>
+													</div>
+													
+													<div class="form-row my-2">
+														<div class="col">Date of Aquisation:</div>
+														<div class="col date_of_aquisition"></div>
+													</div>
+													
+													<div class="form-row my-2">
+														<div class="col">Joint:</div>
+														<div class="col joint_asset"></div>
+													</div>
+													
+													<div class="form-row my-2">
+														<div class="col">Percentage of Share:</div>
+														<div class="col percentage_of_shares"></div>
+													</div>
+                                                    
+													<div class="form-row my-2">
+														<div class="col">Is Bought Asset:</div>
+														<div class="col is_bought"></div>
+													</div>
+													<div class="form-row my-2">
+														<div class="col">Seller Name:</div>
+														<div class="col seller_name"></div>
+													</div>
+													<div class="form-row my-2">
+														<div class="col">Amount:</div>
+														<div class="col buying_price"></div>
+													</div>
+													<div class="form-row my-2">
+														<div class="col">Is Loan Asset:</div>
+														<div class="col by_loan"></div>
+													</div>
+													<div class="form-row my-2">
+														<div class="col">Bank Name:</div>
+														<div class="col bank_name"></div>
+													</div>
+													<div class="form-row my-2">
+														<div class="col">Installment:</div>
+														<div class="col installment"></div>
+													</div>
+													<div class="form-row my-2">
+														<div class="col">Loan Amount:</div>
+														<div class="col loan_amount"></div>
+													</div>
+													<div class="form-row my-2">
+														<div class="col">Date to clear loan:</div>
+														<div class="col expected_loan_clear_date"></div>
+													</div>
+													<div class="form-row my-2">
+														<div class="col">Is Rent Asset:</div>
+														<div class="col is_rent"></div>
+													</div>
+													<div class="form-row my-2">
+														<div class="col">Monthly pay:</div>
+														<div class="col monthly_pay"></div>
+													</div>
+													
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+					</div>
+				</div>

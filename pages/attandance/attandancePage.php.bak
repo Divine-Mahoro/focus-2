@@ -1,0 +1,184 @@
+                <?php
+							if(isset($_POST['btnSubmit'])){
+								$role = prepare_input($_POST['role']);
+								$employeeId= prepare_input($_POST['eid']);
+								$upd_qry = "UPDATE EMPLOYEES SET 
+											role = '".$role."' 
+										   WHERE employee_id = '".$employeeId."'";
+								
+								$stmt = $dbh->prepare($upd_qry);
+								if($stmt->execute()){
+									$success_msg = 'Record Updated successfully';
+									echo "<meta http-equiv='refresh' content='0;url=staff.php?dir=Admin&page=addingRole&success_msg=".$success_msg."'>";
+									//header("Location:submitSuccess.php");
+								} else {
+									$error_msg = 'Updation failed';
+									echo "<meta http-equiv='refresh' content='0;url=staff.php?dir=Admin&page=addingRole&error_msg=".$error_msg."'>";
+								}
+							}
+							echo $upd_qry;
+				?>
+				<!-- row -->
+                <div class="row">
+                    <div class="col-xl-6 col-xxl-12">
+						
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Make Attandance</h4>
+								<?php 
+									if(isset($_GET['success_msg']) && $_GET['success_msg'] != ''){
+										echo '<p class="text-success">'.$_GET['success_msg'].'</p>';
+									} else if(isset($_GET['warning_msg']) && $_GET['warning_msg'] != ''){
+										echo '<p class="text-warning">'.$_GET['warning_msg'].'</p>';
+									} else if(isset($_GET['error_msg']) && $_GET['error_msg'] != ''){
+										echo '<p class="text-danger">'.$_GET['error_msg'].'</p>';
+									} else if(isset($success_msg) && $success_msg != ''){
+										echo '<p class="text-success">'.$success_msg.'</p>';
+									} else if(isset($warning_msg) && $warning_msg != ''){
+										echo '<p class="text-success">'.$warning_msg.'</p>';
+									}  else if(isset($error_msg) && $error_msg != ''){
+										echo '<p class="text-success">'.$error_msg.'</p>';
+									}
+								?>
+                            </div>
+                            <div class="card-body">
+                                <div class="basic-form">
+                                    <form action="<?php echo $main_link; ?>?dir=Admin&page=addingRole" method="POST" name="rsForm" id="rsForm"
+									onsubmit="return getDetails();">
+                                        <div class="form-row">
+									
+											
+											<div class="col-auto mb-2">
+												<select class="custom-select mr-sm-2" name="eid" id="role">
+                                                     <option value="0">Select course...</option>
+													 <?php 
+														
+															foreach($dbh->query("select * from employees order by family_name") as $e){
+																$eid = $e['employee_id'];
+																$ename = $e['family_name'] . " " . $e['given_name'];
+																echo '<option value="'.$eid.'">'.$ename.'</option>';
+															}
+														
+														?>
+                                                </select>
+                                            </div>
+										</div>
+										<div class="form-row">
+											<div class="stat-widget-one card-body">
+												<div class="stat-icon d-inline-block">
+													<i class="text-primary border-primary">Scan QR</i>
+												</div>
+											</div>
+                                        </div>
+										<div id="scandit-barcode-picker">Hello</div>
+										<div id="input-container">
+											<input type="text" id="scan-input1" />
+											<button type="button" id="scan1">SCAN</button>
+											<br />
+											<input type="text" id="scan-input2" />
+											<button type="button" id="scan2">SCAN</button>
+										</div>
+									
+										
+                                        <!-- <button type="submit" name="btnSubmit" class="btn btn-primary">Submit</button> -->
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+        <script type="text/javascript">
+		
+		function getDetails(){
+			let role = document.forms["rsForm"]["role"].value;
+			let id = document.forms["rsForm"]["employees"].value;
+			alert("selected Employee id:"+id);
+			if(id == ""){
+				alert("Please select of Employee");
+				return false;
+			}
+			if(role == "0"){
+				alert("Please select role of Employee");
+				return false;
+			}
+		}
+		[...document.getElementsByTagName('button')].forEach((el) => {
+		  el.addEventListener('click', (e) => {
+			const num = e.currentTarget.id.match(/\d+$/)[0];
+			document.getElementById(`scan-input${num}`).value = "Scan Complete";
+		  });
+		});
+		let scanInput;
+
+    [...document.getElementsByTagName('button')].forEach((el) => {
+      el.addEventListener('click', (e) => {
+        const num = e.currentTarget.id.match(/\d+$/)[0];
+        scanInput = document.getElementById(`scan-input${num}`);
+        scan();
+      });
+    });
+
+    function scan() {
+      startScanning();
+    }
+
+    function showScanner() {
+      scannerContainer.style.opacity = "1";
+      scannerContainer.style.zIndex = "1";
+    }
+
+    function hideScanner() {
+      scannerContainer.style.opacity = "0";
+      scannerContainer.style.zIndex = "-1";
+    }
+
+    function startScanning() {
+      showScanner();
+      if (picker) {
+        picker.resumeScanning();
+      }
+    }
+
+    function stopScanning() {
+      hideScanner();
+      if (picker) {
+        picker.pauseScanning();
+      }
+    }
+    // Configure the library and activate it with a license key
+    const licenseKey = "AZUhPglJK793QucRuCoDoeoESgdrQYvEQm4ZA7N+sZjUTWLjKmeXumZmf/badAwU9kenJbMsUcbZcyzkazTTyxVFPazBSmZQDgFR26J+B47mbqy9p0N+h+JG963fYrWNmV4+SUlNWMhpV3Qw+0LCuyxIiENOV2vPjGU0YCJZkbYNQh5hT10cYSdqZYYvc62ZP1voH7MtLAUwXqEtHXdxozpeN+k3etNLTUqqvYtsWUriXn6ek2TXF9dvN92ed6vGLV+jiS9dykuxUF17fXD/XNNqJLtNYDJYBnJZ8b11Siv0RN5oCnGHg85mADazW5NNN35leXRg1t/3Y/tTVVGYxYtefVQSQrmL32M3LMUU8jzSccJfhnhYJydhhvWIQ+PwMFYaFw1OUXtqbWeOtEdQrOpSvXdAWLkTX2QpndFz0ibhLuSghHVuKuZZ8jEccQENTEXqfZtyoA+KKQNL7l4oeXNj7z9MSuE4A1uHJLZ+3BBbdxZS9X9xKq1XbW5BdJR61gAmIg4X7iZhCcBHsQoBPaAUMVhIRTfDnbiA1wMtsPStFaMv609+h5Y3mBDxrhY4V+uld4NyH0X8lR2pF+odrJJEgxmlo+Uptu6Efy2FBit1TeVIiD4emBDf1O+aoWTbA1XqHkne4wAJLvmDDZM0HiEdRvDBOnS+SXZxjSQwjeGONc0n6GpGIndVIlY95nWazceydMRtDyFXmmk0ukAIJivUgNbrGrlnncs77fkMywKZjSzMJi1PlEfVMgV7zcZdhz+yOcu7zQnuK5dlF7cX98uSo8z9cOCmOVsmArmyVE9DCFOKvTx3x1nXUBnC7lZ4LpurfaLaet9FLlhpBFNd8pWM2hSKR+292workLtQyWQflBY7FbDMegPDMLtgD4zj9dmNRSqSEFi2h/5EUmYNSAP/loqDWBmIHbv/X9NBpGKbhuYVYGuEIb7I5VdWnnTEsVJolmn2YmrUUoHl4taHFM4K1v6L7O2GvJnSozT+gMm2a9SvvB5wvg5MlzWFBYrpDPM+KqJt6LoVXBT7byf7AoKLszavNEFPT4b7HxIheWmoghac7C+wWH1ZY7XkDYcvPW3Cz1WjXx8WF2+yB+Pr6pHBABLrP3a3vxhXzQRtYMxOjmUbYvkrYzWyKoR+vyWcguTX5ASOGwaIWAknKY8BbbPG1nPYR5w6bDApu9MlqcdB/jvdYcwtJunHhoy0wbrY";
+    // Configure the engine location, as explained on http://docs.scandit.com/stable/web/index.html
+    const engineLocation = "https://cdn.jsdelivr.net/npm/scandit-sdk@4.x/build"
+    ScanditSDK.configure(licenseKey, {
+      engineLocation: engineLocation
+    });
+    const scannerContainer = document.getElementById("scandit-barcode-picker");
+    scannerContainer.style.opacity = "0";
+    scannerContainer.style.zIndex = "-1";
+    let picker;
+    // Create & start the picker
+    ScanditSDK.BarcodePicker.create(scannerContainer)
+      .then(barcodePicker => {
+        picker = barcodePicker;
+        // Create the settings object to be applied to the scanner
+        const scanSettings = new ScanditSDK.ScanSettings({
+          enabledSymbologies: ["ean8", "ean13", "upca", "upce", "code128", "code39"]
+        });
+        picker.applyScanSettings(scanSettings);
+        picker.on("scan", scanResult => {
+          stopScanning();
+          scanInput.value = scanResult.barcodes[0].data;
+        });
+        picker.on("scanError", error => alert(error.message));
+        picker.resumeScanning();
+      })
+      .catch(alert);
+		
+		</script>
+<style>
+  #scan:after {
+    display: none;
+  }
+
+</style>

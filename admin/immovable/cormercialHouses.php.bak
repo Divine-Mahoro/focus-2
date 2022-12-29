@@ -1,0 +1,189 @@
+
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
+       
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Hi, Residential!</h4>
+                            <span class="ml-1">Element</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="javascript:void(0)">Immovable</a></li>
+                            <li class="breadcrumb-item active"><a href="javascript:void(0)">Residentials Houses</a></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- row -->
+                <div class="row">
+                    <div class="col-xl-6 col-xxl-12">
+                        
+                        
+                        
+                        
+                        
+						
+						
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Commercial House Declaration</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="basic-form">
+                                    <form>
+                                        <div class="form-row">
+										
+										<div class="form-group col-md-6">
+                                               
+                                                <select class="custom-select mr-sm-2" id="asset_owner">
+                                                    <option selected>Owner...</option>
+                                                    <option value="1">My Self</option>
+                                                    <option value="2">children</option>
+                                                    <option value="3">Spouse</option>
+                                                </select>
+                                            </div>
+											
+											<div class="form-group col-md-6">
+											   
+                                               <select class="custom-select mr-sm-2" id="location">
+                                                    <option selected>Location...</option>
+                                                    <option value="1">Rwanda</option>
+                                                    <option value="2">Abroad</option>
+                                                </select>
+                                            </div>
+											
+                                        <div class="form-row align-items-center">
+                                            <div class="col-auto my-1">
+                                               <select class="custom-select mr-sm-2" id="province" style="display:none;">
+                                                    <option selected>Province...</option>
+                                                    <option value="1">Kigali</option>
+                                                    <option value="2">Sothern</option>
+                                                    <option value="3">Northern</option>
+                                                </select>
+                                            </div>
+                                        </div>
+										
+										<div class="form-row align-items-center">
+                                            <div class="col-auto my-1">
+                                               <select class="custom-select mr-sm-2" id="district" style="display:none;">
+                                                    <option selected>District...</option>
+                                                    <option value="1">Kicukiro</option>
+                                                    <option value="2">Gasabo</option>
+                                                    <option value="3">Nyarugenge</option>
+                                                </select>
+                                            </div>
+                                        </div>
+										<div class="form-row align-items-center">
+                                            <div class="col-auto my-1">
+                                               <select class="custom-select mr-sm-2" id="sector" style="display:none;">
+                                                    <option selected>Sector...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-row align-items-center">
+                                            <div class="col-auto my-1">
+                                                <select class="custom-select mr-sm-2" id="cell" style="display:none;">
+                                                    <option selected>Cell...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+										<div class="form-row align-items-center">
+                                            <div class="col-auto my-1">
+                                                 <select class="custom-select mr-sm-2" id="village" style="display:none;">
+                                                    <option selected>Village...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+										<div class="form-row">
+                                            <div class="col-auto my-1">
+                                                 <select class="custom-select mr-sm-2" id="country" style="display:none;">
+                                                    <option selected>Country...</option>
+                                                </select>
+                                            </div>
+										</div>
+										
+										<div class="form-row align-items-center">
+                                            <div class="col-auto my-1">
+                                                <input type="text" class="form-control" id="city" placeholder="City" style="display:none;">
+                                            </div>
+									    </div>
+										</div>
+										</div>
+										<div class="form-row">
+											<div class="form-group col-md-3">
+												<label>Is Joint Asset: </label>
+												<label class="radio-inline" id="jointyes">
+													<input type="radio" name="jointopt"> Yes</label>
+												<label class="radio-inline" id="jointno">
+                                                <input type="radio" name="jointopt"> No</label>
+											</div>
+											<div class="form-group col-md-2" id="joint_share" style="display:none;">
+                                                <label>Share</label>
+                                                <input type="text" class="form-control">
+                                            </div>
+										</div>
+										
+										<div class="form-row">
+											<div class="form-group col-md-3">
+												<label>Is Bought Asset </label>
+												<label class="radio-inline">
+													<input type="radio" name="boughtopt" id="boughtyes"> Yes</label>
+												<label class="radio-inline">
+                                                <input type="radio" name="boughtopt" id="boughtno"> No</label>
+											</div>
+											<div class="form-group col-md-2" id="bought_seller" style="display:none;">
+                                                <label>Seller name</label>
+                                                <input type="text" class="form-control">
+                                            </div>
+											<div class="form-group col-md-2" id="bought_amount" style="display:none;">
+                                                <label>Amount</label>
+                                                <input type="text" class="form-control">
+                                            </div>
+										</div>
+										
+										<div class="form-row">
+											<div class="form-group col-md-3">
+												<label>Is Loan Asset: </label>
+												<label class="radio-inline">
+													<input type="radio" name="loanopt" id="loanyes"> Yes</label>
+												<label class="radio-inline">
+                                                <input type="radio" name="loanopt" id="loanno"> No</label>
+											</div>
+											<div class="form-group col-md-2" id="loan_bank" style="display:none;">
+                                                <label>Bank Name</label>
+                                                <input type="text" class="form-control">
+                                            </div>
+											<div class="form-group col-md-2" id="loan_clear_date" style="display:none;">
+												<label>Date to clear loan</label>
+												<input type="text" class="form-control" placeholder="yyyy-mm-dd" id="mdate">
+                                            </div>
+										</div>
+										
+                                    
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+						
+						
+						
+                        
+                        
+                        
+                        
+                        
+						
+                    </div>
+					
+					
+                    
+                </div>
+            
+        <!--**********************************
+            Content body end
+        ***********************************-->
